@@ -23,7 +23,7 @@ class HistoryViewModel @Inject constructor(
 
     fun deleteAllActivities() {
         viewModelScope.launch {
-            detailedActivityDao.deleteAllActivities()
+            detailedActivityDao.clearAllData()
         }
     }
 
