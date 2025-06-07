@@ -3,8 +3,11 @@ package org.vinaygopinath.launchchat.screens.history
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
@@ -52,6 +55,36 @@ class HistoryActivity : AppCompatActivity() {
         initializeView()
         initializeObservers()
     }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.history_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_history_clear_all -> {
+                showWarningDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showWarningDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Warning")
+            .setMessage("Are you sure you want to delete all activity history entries? This action is irreversible.")
+            .setPositiveButton("Yes") { _, _ ->
+                lifecycleScope.launch {
+                    viewModel.deleteAllActivities()
+                    historyAdapter.refresh()
+
+                }
+            }
+
+            .setNegativeButton("No", null)
+            .show()
+    }
+
 
     private fun initializeView() {
         with(findViewById<RecyclerView>(R.id.history_recycler_view)) {

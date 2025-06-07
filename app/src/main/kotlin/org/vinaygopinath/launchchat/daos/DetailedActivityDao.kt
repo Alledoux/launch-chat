@@ -27,4 +27,8 @@ interface DetailedActivityDao {
     )
     @Transaction
     suspend fun getDetailedActivities(pageSize: Int, pageNumber: Int): List<DetailedActivity>
+    @Query("DELETE FROM activities")
+    @Transaction
+    suspend fun deleteAllActivities()
+
 }
